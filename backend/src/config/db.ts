@@ -1,6 +1,14 @@
+import dns from 'dns';
 import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { ENV } from './env.js';
+
+// Configure public DNS fallback for Atlas SRV resolution (prevents querySrv ECONNREFUSED on local routers)
+try {
+  dns.setServers(['8.8.8.8', '1.1.1.1']);
+} catch {
+  // Ignore in restricted environments
+}
 
 let isConnected = false;
 let memoryServer: MongoMemoryServer | null = null;
